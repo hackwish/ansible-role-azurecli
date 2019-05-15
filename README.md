@@ -1,5 +1,5 @@
-docker
-======
+azure-cli
+=========
 
 [![Build Status](https://travis-ci.org/andrelohmann/ansible-role-azurecli.svg?branch=master)](https://travis-ci.org/andrelohmann/ansible-role-azurecli)
 
