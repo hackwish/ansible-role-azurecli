@@ -34,6 +34,5 @@
     autoclean: yes
     autoremove: yes
     update_cache: yes
-    cache_valid_time: 0
 
 ...
