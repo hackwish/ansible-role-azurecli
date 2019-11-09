@@ -25,7 +25,15 @@
     repo: "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ {{ ansible_distribution_release }} main"
     state: present
     filename: azure-cli
+  when: ansible_distribution == 'Ubuntu'
 
+- name: install microsoft repo
+  apt_repository:
+    repo: "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ bionic main"
+    state: present
+    filename: azure-cli
+  when: ansible_distribution == 'Linux Mint'
+  
 - name: install azure-cli
   apt:
     name: azure-cli
