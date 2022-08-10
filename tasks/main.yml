@@ -75,6 +75,6 @@
     dpkg_options: 'force-confnew,force-confdef'
     autoclean: yes
     autoremove: yes
-    update_cache: yes
+  ignore_errors: true
 
 ...
