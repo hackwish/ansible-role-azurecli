@@ -32,11 +32,6 @@ Author Information
 Test
 ----
 
-Build ByDefault.
-
-Test
-----
-
 ``ansible-playbook tests/test.yml -i tests/inventory --syntax-check``
 
 Solo Install
