@@ -1,14 +1,15 @@
-azure-cli
-=========
+azure-cli Role
+==============
 
-[![Build Status](https://travis-ci.org/andrelohmann/ansible-role-azurecli.svg?branch=master)](https://travis-ci.org/andrelohmann/ansible-role-azurecli)
-
-Use this role to install azurecli.
+Use this role to install azurecli on Ubuntu and MacOS.
 
 Requirements
 ------------
 
-This role requires ubuntu.
+- Linux Ubuntu based system
+- MacOS based system
+- Ansible
+- Brew (for MacOS)
 
 Example Playbook
 ----------------
@@ -24,5 +25,21 @@ MIT
 
 Author Information
 ------------------
+ Based on https://github.com/andrelohmann
 
-https://github.com/andrelohmann
+ Build ByDefault.
+
+Test
+----
+
+Build ByDefault.
+
+Test
+----
+
+``ansible-playbook tests/test.yml -i tests/inventory --syntax-check``
+
+Solo Install
+------------
+
+``sudo ansible-playbook tests/test.yml -i tests/inventory``

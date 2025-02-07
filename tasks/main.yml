@@ -40,41 +40,48 @@
 
 - set_fact:
     ansible_distribution_release: "jammy"
-    when: (ansible_facts['ansible_distribution_release'] == "vanessa")
+    when: (ansible_facts['ansible_distribution_release'] == "vanessa") or
+          (ansible_facts['ansible_distribution_release'] == "vera") or
+          (ansible_facts['ansible_distribution_release'] == "victoria") or 
+          (ansible_facts['ansible_distribution_release'] == "virginia")
 
-- name: Add Microsoft key
-  apt_key:
-    url: https://packages.microsoft.com/keys/microsoft.asc
-    keyring: /etc/apt/trusted.gpg.d/microsoft.gpg
-    state: present
+- set_fact:
+    ansible_distribution_release: "noble"
+    when: (ansible_facts['ansible_distribution_release'] == "wilma") or
+          (ansible_facts['ansible_distribution_release'] == "xia")
 
-- name: install microsoft repo
-  apt_repository:
-    repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ {{ ansible_distribution_release }} main"
-    state: present
-    filename: azure-cli
-    update_cache: no
+# Install Azure CLI on Ubuntu
+- name: Install Azure CLI on Ubuntu
+  block:
+    - name: Add Microsoft repo
+      apt_repository:
+        repo: "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ {{ ansible_distribution_release }} main"
+        state: present
+        filename: azure-cli
+        update_cache: no
+    - name: Add Microsoft key
+      apt_key:
+        url: https://packages.microsoft.com/keys/microsoft.asc
+        keyring: /etc/apt/trusted.gpg.d/microsoft.gpg
+        state: present
+    - name: apt-get update
+      shell: apt-get update
+      ignore_errors: true
+    - name: install azure-cli
+      apt:
+        name: azure-cli
+        state: latest
+        dpkg_options: 'force-confnew,force-confdef'
+        autoclean: yes
+        autoremove: yes
+      ignore_errors: true
   when: ansible_distribution == 'Ubuntu'
 
-# - name: install microsoft repo
-#   apt_repository:
-#     repo: "deb [arch=amd64 signed-by=/etc/apt/trusted.gpg.d/microsoft.gpg] https://packages.microsoft.com/repos/azure-cli/ bionic main"
-#     state: present
-#     filename: azure-cli
-#     update_cache: no
-#   when: ansible_distribution == 'Linux Mint'
-  
-- name: apt-get update
-  shell: apt-get update
-  ignore_errors: true
 
-- name: install azure-cli
-  apt:
+# Install Azure CLI on MacOS
+- name: Install Azure CLI on MacOS
+  homebrew:
     name: azure-cli
-    state: latest
-    dpkg_options: 'force-confnew,force-confdef'
-    autoclean: yes
-    autoremove: yes
-  ignore_errors: true
-
+    state: present
+  when: ansible_os_family == "Darwin"
 ...
