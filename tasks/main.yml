@@ -59,14 +59,17 @@
         state: present
         filename: azure-cli
         update_cache: no
+      when: ansible_distribution == 'Ubuntu'  
     - name: Add Microsoft key
       apt_key:
         url: https://packages.microsoft.com/keys/microsoft.asc
         keyring: /etc/apt/trusted.gpg.d/microsoft.gpg
         state: present
+      when: ansible_distribution == 'Ubuntu'
     - name: apt-get update
       shell: apt-get update
       ignore_errors: true
+      when: ansible_distribution == 'Ubuntu'
     - name: install azure-cli
       apt:
         name: azure-cli
@@ -75,6 +78,7 @@
         autoclean: yes
         autoremove: yes
       ignore_errors: true
+      when: ansible_distribution == 'Ubuntu'
   when: ansible_distribution == 'Ubuntu'
 
 
