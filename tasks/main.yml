@@ -1,85 +1,10 @@
 ---
-  # Install Azure CLI on Ubuntu
-- name: Install Azure CLI on Ubuntu
-  block:
-  - name: install Ubuntu/Debian dependencies packages
-    apt:
-      name: "{{ packages }}"
-      state: latest
-      dpkg_options: 'force-confnew,force-confdef'
-      autoclean: yes
-      autoremove: yes
-      update_cache: yes
-      cache_valid_time: 0
-    vars:
-      packages:
-      - curl
-      - apt-transport-https
-      - lsb-release
-      - gnupg
-    ignore_errors: true
-
-  - set_fact:
-      ansible_distribution: Ubuntu
-      when: 
-      - ansible_distribution == "Linux Mint"
-
-  - set_fact:
-      ansible_distribution_release: "bionic"
-      when: (ansible_facts['ansible_distribution_release'] == "tessa") or
-            (ansible_facts['ansible_distribution_release'] == "tricia") or
-            (ansible_facts['ansible_distribution_release'] == "tina") or
-            (ansible_facts['ansible_distribution_release'] == "tara") or
-            (ansible_facts['ansible_distribution_release'] == "hera") or
-            (ansible_facts['ansible_distribution_release'] == "juno")
-
-  - set_fact:
-      ansible_distribution_release: "focal"
-      when: (ansible_facts['ansible_distribution_release'] == "ulyana") or
-            (ansible_facts['ansible_distribution_release'] == "ulyssa") or
-            (ansible_facts['ansible_distribution_release'] == "uma") or
-            (ansible_facts['ansible_distribution_release'] == "una") or
-            (ansible_facts['ansible_distribution_release'] == "odin")
-
-  - set_fact:
-      ansible_distribution_release: "jammy"
-      when: (ansible_facts['ansible_distribution_release'] == "vanessa") or
-            (ansible_facts['ansible_distribution_release'] == "vera") or
-            (ansible_facts['ansible_distribution_release'] == "victoria") or 
-            (ansible_facts['ansible_distribution_release'] == "virginia")
-
-  - set_fact:
-      ansible_distribution_release: "noble"
-      when: (ansible_facts['ansible_distribution_release'] == "wilma") or
-            (ansible_facts['ansible_distribution_release'] == "xia")
-
-  # Install Azure CLI on Ubuntu
-  - name: Add Microsoft repo
-    apt_repository:
-      repo: "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ {{ ansible_distribution_release }} main"
-      state: present
-      filename: azure-cli
-      update_cache: no
-
-  - name: Add Microsoft key
-    apt_key:
-      url: https://packages.microsoft.com/keys/microsoft.asc
-      keyring: /etc/apt/trusted.gpg.d/microsoft.gpg
-      state: present
-
-  - name: apt-get update
-    shell: apt-get update
-    ignore_errors: true
-
-  - name: install azure-cli
-    apt:
-      name: azure-cli
-      state: latest
-      dpkg_options: 'force-confnew,force-confdef'
-      autoclean: yes
-      autoremove: yes
-    ignore_errors: true
-  when: ansible_os_family == "Debian"
+# Install Azure CLI on Linux
+- name: Install Azure CLI on Linux
+  shell: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+  args:
+    warn: no
+  when: ansible_system == "Linux"
 
 # Install Azure CLI on MacOS
 - name: Install Azure CLI on MacOS
@@ -87,4 +12,12 @@
     name: azure-cli
     state: present
   when: ansible_os_family == "Darwin"
-...
+
+  # Is azure cli installed?
+- command: az --version
+  register: result
+  failed_when: false
+  changed_when: false
+
+- debug:
+    var: result.stdout
