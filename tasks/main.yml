@@ -2,8 +2,8 @@
 # Install Azure CLI on Linux
 - name: Install Azure CLI on Linux
   shell: curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
-  args:
-    warn: no
+  # args:
+  #   warn: no
   when: ansible_system == "Linux"
 
 # Install Azure CLI on MacOS
